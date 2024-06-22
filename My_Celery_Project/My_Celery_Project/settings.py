@@ -177,3 +177,6 @@ CELERY_TIMEZONE = 'UTC'
 """Email Send Configrations"""
 from dotenv import load_dotenv
 load_dotenv()
+
+
+

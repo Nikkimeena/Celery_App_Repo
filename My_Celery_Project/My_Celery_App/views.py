@@ -3,6 +3,7 @@ from My_Celery_App.tasks import add,mul,send_mail_func
 from django.contrib import messages
 from .models import Signup
 from django.contrib.auth.hashers import make_password
+import json
 
 
 # Create your views here.
@@ -15,6 +16,9 @@ def home(request):
     result=mul.delay(10,50*70)
     print("result is : ",result)
     return render(request,'My_Celery_App/home.html')
+
+
+
 
 
 def register(request):
@@ -46,6 +50,6 @@ def register(request):
             password=make_password(password)
         )
         signup.save()
-        send_mail_func()
-        return redirect('index')
+        send_mail_func.delay(first_name=first_name, email=email)
+        return redirect('home')
     return render(request, 'My_Celery_App/register.html')
