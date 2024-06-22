@@ -19,8 +19,6 @@ def home(request):
 
 
 
-
-
 def register(request):
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
