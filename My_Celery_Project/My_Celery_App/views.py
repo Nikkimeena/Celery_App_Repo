@@ -48,7 +48,8 @@ def register(request):
             phone_number=phone_number,
             password=make_password(password)
         )
-        test_result=email_sending_func.apply_async(first_name=first_name, email=email)
+        test_result = email_sending_func.apply_async(args=[first_name, email])
+        
         if test_result.status == 'SUCCESS':
             signup.save()
             return redirect('home')
