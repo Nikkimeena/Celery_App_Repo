@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 from decouple import config
+from celery.schedules import timedelta
+
 
 
 # DEBUG = True
@@ -42,9 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_celery_beat",
     'My_Celery_App',
-    'django_celery_beat',
     'django_celery_results',
+    
 ]
 
 MIDDLEWARE = [
@@ -119,26 +122,18 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_RESULT_BACKEND = "django-db"
 
 
 CELERY_BROKER_URL = config('CELERY_BROKER_REDIS_URL', default='redis://localhost:6379')
-# if you out to use os.environ the config is:
-# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_REDIS_URL', 'redis://localhost:6379')
 
 
-# this allows you to schedule items in the Django admin.
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+
 
 
 # CELERY settings
@@ -153,25 +148,15 @@ CELERY_IMPORTS = [
 ]
 
 
-# settings.py
 
-# Celery settings
-CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Example using Redis
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Example using Redis
 
-# Optionally, add this to auto-discover tasks
-# INSTALLED_APPS = [
-#     'My_Celery_App',
-#     'django_celery_results',  # Optional: If you are using Django results backend
-# ]!
+
 
 # Celery settings
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
-
-
 
 
 """Email Send Configrations"""

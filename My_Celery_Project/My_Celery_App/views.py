@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from My_Celery_App.tasks import add,mul,send_mail_func
+from My_Celery_App.tasks import add,mul,email_sending_func
 from django.contrib import messages
 from .models import Signup
 from django.contrib.auth.hashers import make_password
@@ -21,6 +21,7 @@ def home(request):
 
 def register(request):
     if request.method == 'POST':
+        
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
@@ -47,7 +48,10 @@ def register(request):
             phone_number=phone_number,
             password=make_password(password)
         )
-        signup.save()
-        send_mail_func.delay(first_name=first_name, email=email)
-        return redirect('home')
+        test_result=email_sending_func.apply_async(first_name=first_name, email=email)
+        if test_result.status == 'SUCCESS':
+            signup.save()
+            return redirect('home')
+        else:
+            return redirect('index')
     return render(request, 'My_Celery_App/register.html')
